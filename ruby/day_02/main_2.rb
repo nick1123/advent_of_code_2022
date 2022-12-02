@@ -22,16 +22,7 @@ IO.readlines("input.txt").each do |line|
   opponent = translator_1[opponent]
   outcome = translator_2[outcome]
   me = translator_3[outcome][opponent]
-  pp line
-  pp opponent
-  pp outcome
-  pp me
-  pp round_scoring[opponent][me]
-  pp shape_selected_scoring[me]
-  puts ''
   sum += round_scoring[opponent][me] + shape_selected_scoring[me]
 end
 
 puts sum
-
-# 17549 is too high
