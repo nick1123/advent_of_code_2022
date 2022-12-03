@@ -33,9 +33,6 @@ end
 ##################################################
 
 def part_2
-  lines = IO.readlines("input2.txt").map(&:strip)
-  # pp lines
-
   pp (IO.readlines("input2.txt").map(&:strip).each_slice(3).map do |row1,row2,row3|
      [row1,row2,row3]
    end.map do |row1,row2,row3|
