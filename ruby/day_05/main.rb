@@ -21,24 +21,16 @@ def parse_diagram
   stacks = {}
 
   lines.each do |line|
-    # puts "***************"
-    # pp line
     line.split("").each_with_index do |char, index|
       next unless alpha?(char)
       stack_number = parse_stack_number(index)
-      # puts '-'
-      # puts char
-      # puts stack_number
 
       stacks[stack_number] ||= []
       stacks[stack_number] << char
-
     end
   end
 
-  puts "------------------"
-  # puts lines
-  pp stacks
+  stacks
 end
 
 def parse_instructions
@@ -47,7 +39,8 @@ end
 
 def part_1
   instructions = parse_instructions
-  parse_diagram
+  stacks = parse_diagram
+  pp stacks
   # pp instructions
 end
 
