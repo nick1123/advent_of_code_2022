@@ -61,4 +61,27 @@ def part_1
   puts top_of_each_stack(stacks)
 end
 
+##########################################
+
+def run2(stacks, instructions)
+  instructions.each do |iterations, from_stack, to_stack|
+    tmp_stack = []
+    iterations.times do
+      tmp_stack << stacks[from_stack].shift
+    end
+
+    iterations.times do
+      stacks[to_stack].unshift(tmp_stack.pop)
+    end
+  end
+end
+
+def part_2
+  instructions = parse_instructions
+  stacks = parse_diagram
+  run2(stacks, instructions)
+  puts top_of_each_stack(stacks)
+end
+
 part_1
+part_2
