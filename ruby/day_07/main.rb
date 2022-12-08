@@ -46,10 +46,16 @@ def parse(line)
 end
 
 class FileNode
+  attr_reader :size
+
   def initialize(name, size, node_layer)
     @name = name
     @size = size.to_i
     @node_layer = node_layer
+  end
+
+  def find_dirs
+    []
   end
 
   def to_s
@@ -81,23 +87,41 @@ class DirNode
     @children[dir_name]
   end
 
+  def size
+    @size ||= @children.values.map(&:size).sum
+  end
+
+  def find_dirs
+    [self, @children.values.map(&:find_dirs)].flatten
+  end
+
   def to_s
-    row = ("  " * @node_layer) + "Dir #{@name}"
+    row = ("  " * @node_layer) + "Dir #{@name} - Total size: #{size}"
     [row, @children.values.map(&:to_s)].flatten.join("\n")
   end
 end
 
-
+# Example node structure:
+# Dir / - Total size: 48381165
+#   Dir a - Total size: 94853
+#     Dir e - Total size: 584
+#       File i 584
+#     File f 29116
+#     File g 2557
+#     File h.lst 62596
+#   File b.txt 14848514
+#   File c.dat 8504156
+#   Dir d - Total size: 24933642
+#     File j 4060174
+#     File d.log 8033020
+#     File d.ext 5626152
+#     File k 7214296
 def build_nodes
-  pp read_input
   root_node = DirNode.new('/', nil, 0)
   current_node = root_node
 
   read_input.each do |line|
-    puts "********"
-    pp line
     data = parse(line)
-    pp data
     if data[:is_ls]
       # No op
     elsif data[:is_dir]
@@ -114,9 +138,21 @@ end
 
 def part_1
   root_node = build_nodes
-  puts "*" * 90
+  # puts root_node
+  puts (root_node.find_dirs.select {|node| node.size <= 100_000}.map(&:size).sum)
+end
 
-  puts root_node
+def part_2
+  # total = 70_000_000
+  # needed_for_update = 30_000_000
+  # current = 50_216_456
+  # current - (total - needed_for_update)
+
+  target = 10_216_456
+
+  root_node = build_nodes
+  puts (root_node.find_dirs.select {|node| node.size >= target}.map(&:size).sort[0])
 end
 
 part_1
+part_2
